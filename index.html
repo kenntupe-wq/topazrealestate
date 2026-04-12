@@ -775,10 +775,10 @@ function openProfile(initials) {
   const photoUploadHtml = `
     <div style="margin-top:14px;display:flex;flex-direction:column;align-items:center;gap:8px;">
       <input type="file" id="photo-upload" accept="image/*" style="display:none;" onchange="handlePhotoUpload(event,'${initials}')" />
-      <button onclick="document.getElementById('photo-upload').click()" style="background:none;border:1px solid rgba(212,175,55,0.3);color:#d4af37;font-family:'DM Sans',sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;padding:8px 18px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#d4af37';this.style.background='rgba(212,175,55,0.06)'" onmouseout="this.style.borderColor='rgba(212,175,55,0.3)';this.style.background='none'">
+      <button onclick="promptPhotoUpload('${initials}')" style="background:none;border:1px solid rgba(212,175,55,0.3);color:#d4af37;font-family:'DM Sans',sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;padding:8px 18px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#d4af37';this.style.background='rgba(212,175,55,0.06)'" onmouseout="this.style.borderColor='rgba(212,175,55,0.3)';this.style.background='none'">
         ${photo ? '↺ Change Photo' : '+ Upload Photo'}
       </button>
-      ${photo ? `<button onclick="removePhoto('${initials}')" style="background:none;border:none;color:#4b5563;font-family:'DM Sans',sans-serif;font-size:0.6rem;cursor:pointer;text-transform:uppercase;letter-spacing:0.15em;" onmouseover="this.style.color='#cc0000'" onmouseout="this.style.color='#4b5563'">Remove photo</button>` : ''}
+      ${photo ? `<button onclick="promptRemovePhoto('${initials}')" style="background:none;border:none;color:#4b5563;font-family:'DM Sans',sans-serif;font-size:0.6rem;cursor:pointer;text-transform:uppercase;letter-spacing:0.15em;" onmouseover="this.style.color='#cc0000'" onmouseout="this.style.color='#4b5563'">Remove photo</button>` : ''}
     </div>`;
 
   const specialtyTags = a.specialties.map(s =>
@@ -880,13 +880,66 @@ function handlePhotoUpload(event, initials) {
   reader.readAsDataURL(file);
 }
 
+// Close profile on Escape key (but not if password modal is open)
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const modal = document.getElementById('pw-modal');
+    if (modal && modal.style.display !== 'none') { closePwModal(); }
+    else { closeProfile(); }
+  }
+});
+
+// ── Password lock ──
+let _pendingAction = null; // 'upload' or 'remove'
+let _pendingInitials = null;
+const PW = 'Alder123';
+
+function promptPhotoUpload(initials) {
+  _pendingAction = 'upload';
+  _pendingInitials = initials;
+  showPwModal();
+}
+
+function promptRemovePhoto(initials) {
+  _pendingAction = 'remove';
+  _pendingInitials = initials;
+  showPwModal();
+}
+
+function showPwModal() {
+  document.getElementById('pw-modal').style.display = 'flex';
+  document.getElementById('pw-input').value = '';
+  document.getElementById('pw-error').style.display = 'none';
+  setTimeout(() => document.getElementById('pw-input').focus(), 50);
+}
+
+function closePwModal() {
+  document.getElementById('pw-modal').style.display = 'none';
+  _pendingAction = null;
+  _pendingInitials = null;
+}
+
+function submitPassword() {
+  const val = document.getElementById('pw-input').value;
+  if (val === PW) {
+    closePwModal();
+    if (_pendingAction === 'upload') {
+      document.getElementById('photo-upload').click();
+    } else if (_pendingAction === 'remove') {
+      removePhoto(_pendingInitials);
+    }
+  } else {
+    const err = document.getElementById('pw-error');
+    err.style.display = 'block';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+  }
+}
+
 function removePhoto(initials) {
   delete agentPhotos[initials];
   openProfile(initials);
 }
-
-// Close on Escape key
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeProfile(); });
 </script>
 
 <!-- ═══ Add "View Profile" buttons to existing agent cards & leaderboard ═══ -->
@@ -944,6 +997,21 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
+
+<!-- PASSWORD MODAL -->
+<div id="pw-modal" style="display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,0.85);align-items:center;justify-content:center;backdrop-filter:blur(6px);">
+  <div style="background:#0e0e0e;border:1px solid rgba(212,175,55,0.25);padding:40px;width:100%;max-width:380px;margin:20px;">
+    <div class="font-display" style="font-size:1.6rem;color:white;margin-bottom:4px;">TEAM ACCESS</div>
+    <div style="font-size:0.65rem;color:#6b7280;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:24px;">Enter your team password to continue</div>
+    <div class="gold-line" style="margin-bottom:24px;"></div>
+    <input id="pw-input" type="password" placeholder="Password" class="input" style="margin-bottom:10px;" onkeydown="if(event.key==='Enter')submitPassword()" />
+    <div id="pw-error" style="display:none;font-size:0.7rem;color:#cc0000;letter-spacing:0.1em;margin-bottom:12px;">❌ Incorrect password. Try again.</div>
+    <div style="display:flex;gap:10px;margin-top:14px;">
+      <button onclick="submitPassword()" class="btn-gold" style="flex:1;text-align:center;cursor:pointer;font-family:'DM Sans',sans-serif;">Confirm →</button>
+      <button onclick="closePwModal()" class="btn-outline" style="cursor:pointer;font-family:'DM Sans',sans-serif;padding:14px 20px;">Cancel</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
