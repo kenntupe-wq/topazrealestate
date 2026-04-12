@@ -6,7 +6,21 @@
     <title>TOPAZ REALTY GROUP — RE/MAX | Utah</title>
     <meta name="description" content="Topaz Realty Group, proud RE/MAX partner. Buying, selling, and investing in Utah real estate. Top-producing agents in the Salt Lake Valley.">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0a0a'/><polygon points='16,4 28,28 4,28' fill='none' stroke='%23d4af37' stroke-width='2.5'/><polygon points='16,10 23,24 9,24' fill='%23d4af37' opacity='0.4'/></svg>">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyBjYPZygJ_52kmhNEVnv330VNZrZGJllrc",
+        authDomain: "topaz-43a26.firebaseapp.com",
+        projectId: "topaz-43a26",
+        storageBucket: "topaz-43a26.firebasestorage.app",
+        messagingSenderId: "384767385339",
+        appId: "1:384767385339:web:ffe12b534753a48c3b1a5e"
+      };
+      firebase.initializeApp(firebaseConfig);
+      const storage = firebase.storage();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -748,8 +762,26 @@ const agents = {
   }
 };
 
-// Store photos for all agents, keyed by initials
+// Photos cached from Firebase (initials -> download URL)
 const agentPhotos = {};
+
+// Load all agent photos from Firebase on startup
+async function loadAllPhotos() {
+  const allInitials = ['KT','MR','JT','AS','DB','NC','PF','SL','BM','TW'];
+  await Promise.all(allInitials.map(async (init) => {
+    try {
+      const url = await storage.ref(`agent-photos/${init}`).getDownloadURL();
+      agentPhotos[init] = url;
+      document.querySelectorAll(`.avatar-${init}`).forEach(av => {
+        av.style.backgroundImage = `url(${url})`;
+        av.style.backgroundSize = 'cover';
+        av.style.backgroundPosition = 'center';
+        av.textContent = '';
+      });
+    } catch(e) { /* no photo yet */ }
+  }));
+}
+loadAllPhotos();
 
 // Track which initials profile is currently open
 let currentProfileInitials = null;
@@ -851,33 +883,38 @@ function closeProfile() {
   document.body.style.overflow = '';
 }
 
-function handlePhotoUpload(event, initials) {
+async function handlePhotoUpload(event, initials) {
   const file = event.target.files[0];
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    agentPhotos[initials] = e.target.result;
-    const a = agents[initials];
-    // Update the avatar shown on the open profile page
-    const el = document.getElementById('agent-avatar-img');
-    if (el) {
-      const img = document.createElement('img');
-      img.id = 'agent-avatar-img';
-      img.src = agentPhotos[initials];
-      img.style.cssText = `width:140px;height:140px;border-radius:50%;object-fit:cover;border:3px solid ${a.avatarColor};box-shadow:0 0 40px rgba(212,175,55,0.2);`;
-      el.replaceWith(img);
-    }
-    // Update matching avatar circles in the main page (leaderboard + agent cards)
+  const a = agents[initials];
+
+  // Show uploading state
+  const avatarEl = document.getElementById('agent-avatar-img');
+  if (avatarEl) avatarEl.style.opacity = '0.4';
+
+  try {
+    // Upload to Firebase Storage
+    const ref = storage.ref(`agent-photos/${initials}`);
+    await ref.put(file);
+    const url = await ref.getDownloadURL();
+
+    // Cache it
+    agentPhotos[initials] = url;
+
+    // Update main page avatars
     document.querySelectorAll(`.avatar-${initials}`).forEach(av => {
-      av.style.backgroundImage = `url(${agentPhotos[initials]})`;
+      av.style.backgroundImage = `url(${url})`;
       av.style.backgroundSize = 'cover';
       av.style.backgroundPosition = 'center';
       av.textContent = '';
     });
-    // Refresh to update the upload/remove buttons
+
+    // Refresh profile page
     openProfile(initials);
-  };
-  reader.readAsDataURL(file);
+  } catch(err) {
+    alert('Upload failed. Check Firebase Storage rules — set to allow read/write.');
+    if (avatarEl) avatarEl.style.opacity = '1';
+  }
 }
 
 // Close profile on Escape key (but not if password modal is open)
@@ -938,8 +975,15 @@ function submitPassword() {
   }
 }
 
-function removePhoto(initials) {
+async function removePhoto(initials) {
+  try {
+    await storage.ref(`agent-photos/${initials}`).delete();
+  } catch(e) { /* file may not exist */ }
   delete agentPhotos[initials];
+  document.querySelectorAll(`.avatar-${initials}`).forEach(av => {
+    av.style.backgroundImage = '';
+    av.textContent = agents[initials].initials;
+  });
   openProfile(initials);
 }
 </script>
