@@ -922,11 +922,13 @@ function closePwModal() {
 function submitPassword() {
   const val = document.getElementById('pw-input').value;
   if (val === PW) {
+    const action = _pendingAction;
+    const initials = _pendingInitials;
     closePwModal();
-    if (_pendingAction === 'upload') {
+    if (action === 'upload') {
       document.getElementById('photo-upload').click();
-    } else if (_pendingAction === 'remove') {
-      removePhoto(_pendingInitials);
+    } else if (action === 'remove') {
+      removePhoto(initials);
     }
   } else {
     const err = document.getElementById('pw-error');
