@@ -4,8 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TOPAZ REALTY GROUP — RE/MAX | Utah</title>
-    <meta name="description" content="Topaz Realty Group, proud RE/MAX partner. Buying, selling, and investing in Utah real estate. Top-producing agents in the Salt Lake Valley.">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0a0a'/><polygon points='16,4 28,28 4,28' fill='none' stroke='%23d4af37' stroke-width='2.5'/><polygon points='16,10 23,24 9,24' fill='%23d4af37' opacity='0.4'/></svg>">
     
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
@@ -33,7 +31,6 @@
         .grid-bg { background-image: radial-gradient(circle at 2px 2px, rgba(212,175,55,0.08) 1px, transparent 0); background-size: 40px 40px; }
         .glass { background: rgba(14,14,14,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(212,175,55,0.12); }
         .accent { color: #d4af37; }
-        .gold-line { height: 1px; background: linear-gradient(90deg, transparent, #d4af37, transparent); }
 
         nav { position: fixed; top: 0; width: 100%; z-index: 50; background: rgba(8,8,8,0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(212,175,55,0.1); }
         .nav-inner { max-width:1280px; margin:auto; padding:0 20px; height:72px; display:flex; align-items:center; justify-content:space-between; }
@@ -44,28 +41,27 @@
         .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 100px 20px 60px; position: relative; overflow: hidden; }
         .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 60%, rgba(204,0,0,0.05) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(212,175,55,0.06) 0%, transparent 60%); pointer-events: none; }
 
-        .card { background: rgba(12,12,12,0.9); border: 1px solid rgba(212,175,55,0.1); padding: 32px; transition: all 0.25s; height: 100%; }
+        .card { background: rgba(12,12,12,0.9); border: 1px solid rgba(212,175,55,0.1); padding: 32px; transition: all 0.25s; }
         .card:hover { border-color: #d4af37; box-shadow: 0 0 30px rgba(212,175,55,0.1); transform: translateY(-3px); }
 
         .btn-gold { background: #d4af37; color: #080808; font-weight: 700; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 16px 36px; display: inline-block; transition: all 0.2s; text-decoration: none; border: none; cursor: pointer; }
         .btn-gold:hover { background: #c4a030; box-shadow: 0 0 24px rgba(212,175,55,0.3); }
         .btn-outline { border: 1px solid rgba(212,175,55,0.4); color: #d4af37; font-weight: 600; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 14px 32px; display: inline-block; transition: all 0.2s; text-decoration: none; }
-        .btn-outline:hover { border-color: #d4af37; background: rgba(212,175,55,0.06); }
 
         .remax-badge { background: #cc0000; color: white; font-family: 'Bebas Neue', sans-serif; font-size: 0.75rem; letter-spacing: 0.2em; padding: 4px 12px; display: inline-block; }
 
-        /* Leaderboard Styles */
+        /* Leaderboard UI */
         .lb-row { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.04); transition: all 0.2s; }
-        .lb-row.first { background: rgba(212,175,55,0.08); border-left: 3px solid #d4af37; }
+        .lb-row.top-spot { background: rgba(212,175,55,0.08); border-left: 3px solid #d4af37; }
         .lb-rank { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; min-width: 36px; text-align: center; }
         .lb-avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; flex-shrink: 0; }
         .lb-bar { height: 4px; background: rgba(212,175,55,0.12); flex: 1; border-radius: 2px; overflow: hidden; margin: 0 15px; }
         .lb-fill { height: 100%; background: linear-gradient(90deg, #d4af37, #fcd34d); }
-        .lb-vol { width: 100px; text-align: right; }
+        .lb-vol { width: 100px; text-align: right; font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; }
 
         @media (max-width: 768px) {
             .hero-title { font-size: 4rem !important; }
-            .nav-links a:not(.btn-gold) { display: none; }
+            .nav-links { display: none; }
             .lb-bar { display: none; }
         }
     </style>
@@ -82,9 +78,8 @@
         </div>
         <div class="nav-links">
             <a href="#listings">Listings</a>
-            <a href="#agents">Agents</a>
             <a href="#leaderboard">Leaderboard</a>
-            <a href="#blog">Insights</a>
+            <a href="#blog">News</a>
             <a href="#contact" class="btn-gold" style="padding:10px 20px;">Contact</a>
         </div>
     </div>
@@ -99,7 +94,7 @@
         <h1 class="font-display hero-title" style="font-size:7rem;line-height:0.88;color:white;">UTAH REAL</h1>
         <h1 class="font-display hero-title accent" style="font-size:7rem;line-height:0.88;">ESTATE,</h1>
         <h1 class="font-display hero-title" style="font-size:7rem;line-height:0.88;color:white;margin-bottom:36px;">REDEFINED.</h1>
-        <p style="color:#9ca3af;max-width:540px;font-size:1rem;line-height:1.8;margin-bottom:40px;">Salt Lake Valley's premier real estate powerhouse. We combine elite negotiation with a global network to secure your future.</p>
+        <p style="color:#9ca3af;max-width:540px;font-size:1rem;line-height:1.8;margin-bottom:40px;">Salt Lake Valley's premier real estate powerhouse. Delivering elite results for home security and residential services.</p>
         <div style="display:flex;gap:16px;">
             <a href="#listings" class="btn-gold">Browse Listings</a>
             <a href="#contact" class="btn-outline">Talk to an Agent</a>
@@ -108,42 +103,50 @@
 </section>
 
 <div style="background:#d4af37;padding:24px 0;">
-    <div style="max-width:1280px;margin:auto;padding:0 20px;display:flex;justify-content:center;gap:60px;flex-wrap:wrap;">
-        <div style="text-align:center;"><div class="font-display" style="font-size:2rem;color:#080808;">$180M+</div><div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:#3a2e00;">Volume Closed</div></div>
-        <div style="text-align:center;"><div class="font-display" style="font-size:2rem;color:#080808;">400+</div><div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:#3a2e00;">Homes Sold</div></div>
-        <div style="text-align:center;"><div class="font-display" style="font-size:2rem;color:#080808;">12</div><div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:#3a2e00;">Active Agents</div></div>
+    <div style="max-width:1280px;margin:auto;padding:0 20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+        <div style="text-align:center;flex:1;"><div class="font-display" style="font-size:2rem;color:#080808;">$180M+</div><div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:#3a2e00;">Volume Closed</div></div>
+        <div style="text-align:center;flex:1;"><div class="font-display" style="font-size:2rem;color:#080808;">400+</div><div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:#3a2e00;">Homes Sold</div></div>
+        <div style="text-align:center;flex:1;"><div class="font-display" style="font-size:2rem;color:#080808;">99%</div><div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:#3a2e00;">Client Success</div></div>
     </div>
 </div>
 
 <section id="leaderboard" style="padding:100px 20px; background: rgba(10,10,10,0.5);">
     <div style="max-width:1280px; margin:auto;">
         <div style="text-align:center; margin-bottom:60px;">
-            <div class="font-display accent" style="font-size:0.85rem; letter-spacing:0.3em; margin-bottom:12px;">TOP PRODUCERS</div>
-            <h2 class="font-display" style="font-size:4rem; color:white; line-height:1;">THE <span class="accent">LEADERBOARD</span></h2>
+            <div class="font-display accent" style="font-size:0.85rem; letter-spacing:0.3em; margin-bottom:12px;">PERFORMANCE RANKINGS</div>
+            <h2 class="font-display" style="font-size:4rem; color:white; line-height:1;">MONTHLY <span class="accent">LEADERBOARD</span></h2>
         </div>
 
         <div class="glass" style="max-width:900px; margin:auto; border-radius:4px; overflow:hidden;">
-            <div class="lb-row first">
+            <div class="lb-row top-spot">
                 <span class="lb-rank">01</span>
                 <div class="lb-avatar" style="background:#d4af37; color:#080808;">KT</div>
                 <div style="flex:2;">
                     <div style="font-weight:600; font-size:0.9rem;">Kenneth Tupea</div>
-                    <div style="font-size:0.7rem; color:#9ca3af; text-transform:uppercase;">Principal Broker</div>
+                    <div style="font-size:0.7rem; color:#9ca3af; text-transform:uppercase;">Principal Lead</div>
                 </div>
                 <div class="lb-bar"><div class="lb-fill" style="width:100%"></div></div>
-                <div class="lb-vol font-display" style="font-size:1.4rem;">$4.2M</div>
-                <div class="lb-units" style="color:#9ca3af; font-size:0.8rem; width: 60px; text-align: right;">9 Units</div>
+                <div class="lb-vol">$4.8M</div>
             </div>
             <div class="lb-row">
                 <span class="lb-rank">02</span>
-                <div class="lb-avatar" style="background:#333; color:#d4af37;">JS</div>
+                <div class="lb-avatar" style="background:#333; color:#d4af37;">AM</div>
                 <div style="flex:2;">
-                    <div style="font-weight:600; font-size:0.9rem;">Jessica Sterling</div>
-                    <div style="font-size:0.7rem; color:#9ca3af; text-transform:uppercase;">Luxury Specialist</div>
+                    <div style="font-weight:600; font-size:0.9rem;">Alex Miller</div>
+                    <div style="font-size:0.7rem; color:#9ca3af; text-transform:uppercase;">Senior Associate</div>
                 </div>
-                <div class="lb-bar"><div class="lb-fill" style="width:85%"></div></div>
-                <div class="lb-vol font-display" style="font-size:1.4rem;">$3.6M</div>
-                <div class="lb-units" style="color:#9ca3af; font-size:0.8rem; width: 60px; text-align: right;">6 Units</div>
+                <div class="lb-bar"><div class="lb-fill" style="width:65%"></div></div>
+                <div class="lb-vol">$2.9M</div>
+            </div>
+            <div class="lb-row">
+                <span class="lb-rank">03</span>
+                <div class="lb-avatar" style="background:#333; color:#d4af37;">SR</div>
+                <div style="flex:2;">
+                    <div style="font-weight:600; font-size:0.9rem;">Sarah Reed</div>
+                    <div style="font-size:0.7rem; color:#9ca3af; text-transform:uppercase;">Investment Specialist</div>
+                </div>
+                <div class="lb-bar"><div class="lb-fill" style="width:40%"></div></div>
+                <div class="lb-vol">$1.4M</div>
             </div>
         </div>
     </div>
@@ -152,20 +155,20 @@
 <section id="blog" style="padding:100px 20px;">
     <div style="max-width:1280px; margin:auto;">
         <div style="margin-bottom:56px;">
-            <div class="font-display accent" style="font-size:0.85rem; letter-spacing:0.3em; margin-bottom:12px;">MARKET INSIGHTS</div>
-            <h2 class="font-display" style="font-size:4.5rem; color:white; line-height:0.9;">LATEST <span class="accent">NEWS.</span></h2>
+            <div class="font-display accent" style="font-size:0.85rem; letter-spacing:0.3em; margin-bottom:12px;">INSIGHTS & UPDATES</div>
+            <h2 class="font-display" style="font-size:4.5rem; color:white; line-height:0.9;">TOPAZ <span class="accent">NEWS.</span></h2>
         </div>
 
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(350px, 1fr)); gap:30px;">
             <article class="card" style="padding:0; overflow:hidden;">
-                <div style="height:200px; background:linear-gradient(45deg, #1a1a1a, #d4af3722); display:flex; align-items:center; justify-content:center;">
+                <div style="height:200px; background:linear-gradient(45deg, #1a1a1a, #d4af3711); display:flex; align-items:center; justify-content:center;">
                    <span class="font-display accent" style="font-size:3rem; opacity:0.5;">SPOTLIGHT</span>
                 </div>
                 <div style="padding:30px;">
-                    <div style="font-size:0.7rem; color:#d4af37; margin-bottom:10px; font-weight:600; letter-spacing:0.1em;">AGENT PROFILE</div>
-                    <h3 class="font-display" style="font-size:1.8rem; color:white; margin-bottom:15px;">Kenneth Tupea: Leading the 2026 Housing Shift</h3>
-                    <p style="color:#9ca3af; font-size:0.9rem; line-height:1.6; margin-bottom:20px;">As a top producer at Topaz Realty Group, Kenneth Tupea breaks down why the Salt Lake Valley remains a primary target for residential growth...</p>
-                    <a href="#" style="color:white; font-size:0.8rem; font-weight:700; text-decoration:none;">READ MORE →</a>
+                    <div style="font-size:0.7rem; color:#d4af37; margin-bottom:10px; font-weight:600; letter-spacing:0.1em;">LEADERSHIP</div>
+                    <h3 class="font-display" style="font-size:1.8rem; color:white; margin-bottom:15px;">Kenneth Tupea: Leading the West Jordan Market</h3>
+                    <p style="color:#9ca3af; font-size:0.9rem; line-height:1.6; margin-bottom:20px;">A detailed look at Kenneth Tupea's strategic approach to the Utah real estate landscape in 2026, combining door-to-door expertise with high-level brokerage.</p>
+                    <a href="#" style="color:white; font-size:0.8rem; font-weight:700; text-decoration:none; text-transform:uppercase; letter-spacing:0.1em;">Read Article →</a>
                 </div>
             </article>
 
@@ -175,24 +178,34 @@
                 </div>
                 <div style="padding:30px;">
                     <div style="font-size:0.7rem; color:#d4af37; margin-bottom:10px; font-weight:600; letter-spacing:0.1em;">MARKET TRENDS</div>
-                    <h3 class="font-display" style="font-size:1.8rem; color:white; margin-bottom:15px;">Why Inventory in Utah is Hitting Record Lows</h3>
-                    <p style="color:#9ca3af; font-size:0.9rem; line-height:1.6; margin-bottom:20px;">The demand for high-end properties along the Wasatch Front has reached a fever pitch. We look at the architectural trends for the year...</p>
-                    <a href="#" style="color:white; font-size:0.8rem; font-weight:700; text-decoration:none;">READ MORE →</a>
+                    <h3 class="font-display" style="font-size:1.8rem; color:white; margin-bottom:15px;">Utah Housing Inventory: What to Expect in Q2</h3>
+                    <p style="color:#9ca3af; font-size:0.9rem; line-height:1.6; margin-bottom:20px;">Analyzing current inventory levels along the Wasatch Front and why buyer demand continues to outpace new construction.</p>
+                    <a href="#" style="color:white; font-size:0.8rem; font-weight:700; text-decoration:none; text-transform:uppercase; letter-spacing:0.1em;">Read Article →</a>
+                </div>
+            </article>
+
+            <article class="card" style="padding:0; overflow:hidden;">
+                <div style="height:200px; background:linear-gradient(45deg, #1a1a1a, #0a0a0a); display:flex; align-items:center; justify-content:center;">
+                    <span class="font-display" style="font-size:3rem; color:white; opacity:0.3;">TIPS</span>
+                </div>
+                <div style="padding:30px;">
+                    <div style="font-size:0.7rem; color:#d4af37; margin-bottom:10px; font-weight:600; letter-spacing:0.1em;">HOMEOWNER TIPS</div>
+                    <h3 class="font-display" style="font-size:1.8rem; color:white; margin-bottom:15px;">Maximizing ROI with Smart Home Security</h3>
+                    <p style="color:#9ca3af; font-size:0.9rem; line-height:1.6; margin-bottom:20px;">How modern residential security upgrades can increase appraisal value and offer a faster closing experience for sellers.</p>
+                    <a href="#" style="color:white; font-size:0.8rem; font-weight:700; text-decoration:none; text-transform:uppercase; letter-spacing:0.1em;">Read Article →</a>
                 </div>
             </article>
         </div>
     </div>
 </section>
 
-<section id="contact" style="padding:100px 20px; background: #0a0a0a;">
-    <div style="max-width:600px; margin:auto; text-align:center;">
-        <h2 class="font-display" style="font-size:3.5rem; color:white; margin-bottom:20px;">READY TO <span class="accent">MOVE?</span></h2>
-        <p style="color:#6b7280; margin-bottom:40px;">Send us a message and a Topaz advisor will reach out shortly.</p>
+<section id="contact" style="padding:100px 20px;">
+    <div class="glass" style="max-width:600px; margin:auto; padding:40px; text-align:center;">
+        <h2 class="font-display" style="font-size:3rem; color:white; margin-bottom:20px;">READY TO <span class="accent">WORK?</span></h2>
         <form style="display:grid; gap:15px;">
-            <input type="text" placeholder="Full Name" style="background:#000; border:1px solid #333; padding:15px; color:white; outline:none;">
-            <input type="email" placeholder="Email Address" style="background:#000; border:1px solid #333; padding:15px; color:white; outline:none;">
-            <textarea placeholder="Your Message" rows="4" style="background:#000; border:1px solid #333; padding:15px; color:white; outline:none;"></textarea>
-            <button type="submit" class="btn-gold">Send Message</button>
+            <input type="text" placeholder="Name" style="background:#000; border:1px solid #333; padding:15px; color:white; outline:none;">
+            <input type="email" placeholder="Email" style="background:#000; border:1px solid #333; padding:15px; color:white; outline:none;">
+            <button type="submit" class="btn-gold">Get in Touch</button>
         </form>
     </div>
 </section>
