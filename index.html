@@ -6,7 +6,7 @@
     <title>TOPAZ REALTY GROUP — RE/MAX | Utah</title>
     <meta name="description" content="Topaz Realty Group, proud RE/MAX partner. Buying, selling, wholesale, creative financing, and investing in Utah real estate. Top-producing agents in the Salt Lake Valley.">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0a0a'/><polygon points='16,4 28,28 4,28' fill='none' stroke='%23d4af37' stroke-width='2.5'/><polygon points='16,10 23,24 9,24' fill='%23d4af37' opacity='0.4'/></svg>">
-    
+
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
@@ -22,6 +22,14 @@
       firebase.initializeApp(firebaseConfig);
       const db = firebase.firestore();
       const storage = firebase.storage();
+
+      // ─────────────────────────────────────────────────────────────
+      // DRAPER LISTING PHOTO
+      // Placeholder below. Replace the whole string with your original
+      // "data:image/jpeg;base64,..." photo (or a normal image URL).
+      // It is used by BOTH the static card and the Firebase-rendered card.
+      // ─────────────────────────────────────────────────────────────
+      const DRAPER_IMG = "data:image/svg+xml;utf8," + encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' width='800' height='480'><rect width='800' height='480' fill='#141414'/><polygon points='400,110 560,370 240,370' fill='none' stroke='#d4af37' stroke-width='6'/><text x='400' y='420' fill='#6b7280' font-family='sans-serif' font-size='22' text-anchor='middle'>Listing photo placeholder</text></svg>");
     </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -170,12 +178,13 @@
             <h2 class="font-display" style="font-size:4.5rem;color:white;line-height:0.9;margin-bottom:20px;">FEATURED<br/><span class="accent">PROPERTIES.</span></h2>
             <div class="gold-line" style="width:80px;"></div>
         </div>
-        
+
         <div id="dynamicListings" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="three-col">
+            <!-- Static Draper listing (JS re-renders this along with any Firebase listings) -->
             <div class="listing-card">
                 <div>
                     <div style="position:relative;">
-                        <img src="data:image/png;base64,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" style="width:100%;height:200px;object-fit:cover;" />
+                        <img id="draperImgStatic" alt="Draper Estate" style="width:100%;height:200px;object-fit:cover;" />
                         <div style="position:absolute;top:12px;left:12px;background:#d4af37;color:#080808;font-family:'Bebas Neue',sans-serif;font-size:0.75rem;letter-spacing:0.1em;padding:4px 10px;">FOR SALE</div>
                     </div>
                     <div style="padding:24px;">
@@ -268,7 +277,7 @@
 <section id="leaderboard" class="section-pad" style="padding:100px 20px;">
     <div style="max-width:1280px;margin:auto;">
         <div style="margin-bottom:56px;text-align:center;">
-            <div class="font-display accent" style="font-size:0.85rem;letter-spacing:0.3em;margin-bottom:12px;">JUNE 2026</div>
+            <div class="font-display accent" style="font-size:0.85rem;letter-spacing:0.3em;margin-bottom:12px;">SEPTEMBER 2026</div>
             <h2 class="font-display" style="font-size:4.5rem;color:white;line-height:0.9;margin-bottom:16px;">AGENT<br/><span class="accent">LEADERBOARD.</span></h2>
             <p style="color:#9ca3af;max-width:480px;margin:0 auto;font-size:0.9rem;">Monthly rankings by total closed sales volume. Our agents compete hard — and our clients win.</p>
             <div class="gold-line" style="width:80px;margin:20px auto 0;"></div>
@@ -293,8 +302,8 @@
                         <div style="font-size:0.65rem;color:#d4af37;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;">⭐ Top Agent · RE/MAX Chairman Club</div>
                         <div style="margin-top:6px;" class="lb-bar"><div class="lb-fill" style="width:100%;"></div></div>
                     </div>
-                    <div class="lb-units"><div class="font-display accent" style="font-size:1.6rem;">19</div><div style="font-size:0.6rem;color:#6b7280;">units</div></div>
-                    <div class="lb-vol"><div class="font-display" style="font-size:1.3rem;color:white;">$14.2M</div><div style="font-size:0.6rem;color:#6b7280;">volume</div></div>
+                    <div class="lb-units"><div class="font-display accent" style="font-size:1.6rem;">16</div><div style="font-size:0.6rem;color:#6b7280;">units</div></div>
+                    <div class="lb-vol"><div class="font-display" style="font-size:1.3rem;color:white;">$12.8M</div><div style="font-size:0.6rem;color:#6b7280;">volume</div></div>
                 </div>
 
                 <div class="lb-row second">
@@ -303,10 +312,10 @@
                     <div style="flex:1;min-width:0;">
                         <div style="font-weight:600;color:white;font-size:0.95rem;">Madison Reyes</div>
                         <div style="font-size:0.65rem;color:#6b7280;">RE/MAX Diamond Club</div>
-                        <div style="margin-top:6px;" class="lb-bar"><div class="lb-fill" style="width:74%;background:linear-gradient(90deg,#9ca3af,#d1d5db);"></div></div>
+                        <div style="margin-top:6px;" class="lb-bar"><div class="lb-fill" style="width:77%;background:linear-gradient(90deg,#9ca3af,#d1d5db);"></div></div>
                     </div>
-                    <div class="lb-units"><div class="font-display" style="font-size:1.6rem;color:#9ca3af;">14</div><div style="font-size:0.6rem;color:#6b7280;">units</div></div>
-                    <div class="lb-vol"><div class="font-display" style="font-size:1.3rem;color:#9ca3af;">$10.5M</div><div style="font-size:0.6rem;color:#6b7280;">volume</div></div>
+                    <div class="lb-units"><div class="font-display" style="font-size:1.6rem;color:#9ca3af;">13</div><div style="font-size:0.6rem;color:#6b7280;">units</div></div>
+                    <div class="lb-vol"><div class="font-display" style="font-size:1.3rem;color:#9ca3af;">$9.9M</div><div style="font-size:0.6rem;color:#6b7280;">volume</div></div>
                 </div>
 
                 <div class="lb-row third">
@@ -315,10 +324,10 @@
                     <div style="flex:1;min-width:0;">
                         <div style="font-weight:600;color:white;font-size:0.95rem;">Jordan Taua</div>
                         <div style="font-size:0.65rem;color:#6b7280;">RE/MAX Platinum</div>
-                        <div style="margin-top:6px;" class="lb-bar"><div class="lb-fill" style="width:61%;background:linear-gradient(90deg,#cd7f32,#e8a850);"></div></div>
+                        <div style="margin-top:6px;" class="lb-bar"><div class="lb-fill" style="width:60%;background:linear-gradient(90deg,#cd7f32,#e8a850);"></div></div>
                     </div>
-                    <div class="lb-units"><div class="font-display" style="font-size:1.6rem;color:#cd7f32;">11</div><div style="font-size:0.6rem;color:#6b7280;">units</div></div>
-                    <div class="lb-vol"><div class="font-display" style="font-size:1.3rem;color:#cd7f32;">$8.6M</div><div style="font-size:0.6rem;color:#6b7280;">volume</div></div>
+                    <div class="lb-units"><div class="font-display" style="font-size:1.6rem;color:#cd7f32;">10</div><div style="font-size:0.6rem;color:#6b7280;">units</div></div>
+                    <div class="lb-vol"><div class="font-display" style="font-size:1.3rem;color:#cd7f32;">$7.7M</div><div style="font-size:0.6rem;color:#6b7280;">volume</div></div>
                 </div>
 
                 <div class="lb-row">
@@ -329,8 +338,8 @@
                         <div style="font-size:0.65rem;color:#6b7280;">RE/MAX 100% Club</div>
                         <div style="margin-top:6px;" class="lb-bar"><div class="lb-fill" style="width:48%;"></div></div>
                     </div>
-                    <div class="lb-units"><div class="font-display" style="font-size:1.6rem;color:#6b7280;">9</div><div style="font-size:0.6rem;color:#4b5563;">units</div></div>
-                    <div class="lb-vol"><div class="font-display" style="font-size:1.3rem;color:#6b7280;">$6.8M</div><div style="font-size:0.6rem;color:#4b5563;">volume</div></div>
+                    <div class="lb-units"><div class="font-display" style="font-size:1.6rem;color:#6b7280;">8</div><div style="font-size:0.6rem;color:#4b5563;">units</div></div>
+                    <div class="lb-vol"><div class="font-display" style="font-size:1.3rem;color:#6b7280;">$6.1M</div><div style="font-size:0.6rem;color:#4b5563;">volume</div></div>
                 </div>
 
                 <div class="lb-row">
@@ -339,10 +348,10 @@
                     <div style="flex:1;min-width:0;">
                         <div style="font-weight:600;color:#d1d5db;font-size:0.95rem;">Derek Bateman</div>
                         <div style="font-size:0.65rem;color:#6b7280;">RE/MAX Executive Club</div>
-                        <div style="margin-top:6px;" class="lb-bar"><div class="lb-fill" style="width:40%;"></div></div>
+                        <div style="margin-top:6px;" class="lb-bar"><div class="lb-fill" style="width:41%;"></div></div>
                     </div>
                     <div class="lb-units"><div class="font-display" style="font-size:1.6rem;color:#6b7280;">7</div><div style="font-size:0.6rem;color:#4b5563;">units</div></div>
-                    <div class="lb-vol"><div class="font-display" style="font-size:1.3rem;color:#6b7280;">$5.6M</div><div style="font-size:0.6rem;color:#4b5563;">volume</div></div>
+                    <div class="lb-vol"><div class="font-display" style="font-size:1.3rem;color:#6b7280;">$5.2M</div><div style="font-size:0.6rem;color:#4b5563;">volume</div></div>
                 </div>
 
                 <div class="lb-row">
@@ -351,10 +360,10 @@
                     <div style="flex:1;min-width:0;">
                         <div style="font-weight:600;color:#d1d5db;font-size:0.95rem;">Natalie Chen</div>
                         <div style="font-size:0.65rem;color:#6b7280;">RE/MAX Associate</div>
-                        <div style="margin-top:6px;" class="lb-bar"><div class="lb-fill" style="width:33%;"></div></div>
+                        <div style="margin-top:6px;" class="lb-bar"><div class="lb-fill" style="width:32%;"></div></div>
                     </div>
-                    <div class="lb-units"><div class="font-display" style="font-size:1.6rem;color:#6b7280;">6</div><div style="font-size:0.6rem;color:#4b5563;">units</div></div>
-                    <div class="lb-vol"><div class="font-display" style="font-size:1.3rem;color:#6b7280;">$4.7M</div><div style="font-size:0.6rem;color:#4b5563;">volume</div></div>
+                    <div class="lb-units"><div class="font-display" style="font-size:1.6rem;color:#6b7280;">5</div><div style="font-size:0.6rem;color:#4b5563;">units</div></div>
+                    <div class="lb-vol"><div class="font-display" style="font-size:1.3rem;color:#6b7280;">$4.1M</div><div style="font-size:0.6rem;color:#4b5563;">volume</div></div>
                 </div>
 
                 <div class="lb-row">
@@ -363,10 +372,10 @@
                     <div style="flex:1;min-width:0;">
                         <div style="font-weight:600;color:#d1d5db;font-size:0.95rem;">Paul Fotu</div>
                         <div style="font-size:0.65rem;color:#6b7280;">RE/MAX Associate</div>
-                        <div style="margin-top:6px;" class="lb-bar"><div class="lb-fill" style="width:26%;"></div></div>
+                        <div style="margin-top:6px;" class="lb-bar"><div class="lb-fill" style="width:27%;"></div></div>
                     </div>
                     <div class="lb-units"><div class="font-display" style="font-size:1.6rem;color:#6b7280;">5</div><div style="font-size:0.6rem;color:#4b5563;">units</div></div>
-                    <div class="lb-vol"><div class="font-display" style="font-size:1.3rem;color:#6b7280;">$3.7M</div><div style="font-size:0.6rem;color:#4b5563;">volume</div></div>
+                    <div class="lb-vol"><div class="font-display" style="font-size:1.3rem;color:#6b7280;">$3.5M</div><div style="font-size:0.6rem;color:#4b5563;">volume</div></div>
                 </div>
 
                 <div class="lb-row">
@@ -377,8 +386,8 @@
                         <div style="font-size:0.65rem;color:#6b7280;">RE/MAX Associate</div>
                         <div style="margin-top:6px;" class="lb-bar"><div class="lb-fill" style="width:20%;"></div></div>
                     </div>
-                    <div class="lb-units"><div class="font-display" style="font-size:1.6rem;color:#6b7280;">4</div><div style="font-size:0.6rem;color:#4b5563;">units</div></div>
-                    <div class="lb-vol"><div class="font-display" style="font-size:1.3rem;color:#6b7280;">$2.9M</div><div style="font-size:0.6rem;color:#4b5563;">volume</div></div>
+                    <div class="lb-units"><div class="font-display" style="font-size:1.6rem;color:#6b7280;">3</div><div style="font-size:0.6rem;color:#4b5563;">units</div></div>
+                    <div class="lb-vol"><div class="font-display" style="font-size:1.3rem;color:#6b7280;">$2.6M</div><div style="font-size:0.6rem;color:#4b5563;">volume</div></div>
                 </div>
 
                 <div class="lb-row">
@@ -387,10 +396,10 @@
                     <div style="flex:1;min-width:0;">
                         <div style="font-weight:600;color:#d1d5db;font-size:0.95rem;">Brandon Maea</div>
                         <div style="font-size:0.65rem;color:#6b7280;">RE/MAX Associate</div>
-                        <div style="margin-top:6px;" class="lb-bar"><div class="lb-fill" style="width:14%;"></div></div>
+                        <div style="margin-top:6px;" class="lb-bar"><div class="lb-fill" style="width:15%;"></div></div>
                     </div>
                     <div class="lb-units"><div class="font-display" style="font-size:1.6rem;color:#6b7280;">3</div><div style="font-size:0.6rem;color:#4b5563;">units</div></div>
-                    <div class="lb-vol"><div class="font-display" style="font-size:1.3rem;color:#6b7280;">$2.0M</div><div style="font-size:0.6rem;color:#4b5563;">volume</div></div>
+                    <div class="lb-vol"><div class="font-display" style="font-size:1.3rem;color:#6b7280;">$1.9M</div><div style="font-size:0.6rem;color:#4b5563;">volume</div></div>
                 </div>
 
                 <div class="lb-row" style="border-bottom:none;">
@@ -402,11 +411,11 @@
                         <div style="margin-top:6px;" class="lb-bar"><div class="lb-fill" style="width:9%;"></div></div>
                     </div>
                     <div class="lb-units"><div class="font-display" style="font-size:1.6rem;color:#6b7280;">2</div><div style="font-size:0.6rem;color:#4b5563;">units</div></div>
-                    <div class="lb-vol"><div class="font-display" style="font-size:1.3rem;color:#6b7280;">$1.3M</div><div style="font-size:0.6rem;color:#4b5563;">volume</div></div>
+                    <div class="lb-vol"><div class="font-display" style="font-size:1.3rem;color:#6b7280;">$1.2M</div><div style="font-size:0.6rem;color:#4b5563;">volume</div></div>
                 </div>
 
             </div>
-            <div style="text-align:center;margin-top:12px;font-size:0.65rem;color:#374151;letter-spacing:0.15em;text-transform:uppercase;">Updated June 26, 2026 · Resets July 1</div>
+            <div style="text-align:center;margin-top:12px;font-size:0.65rem;color:#374151;letter-spacing:0.15em;text-transform:uppercase;">Sample Data · Updated September 28, 2026 · Resets October 1</div>
         </div>
     </div>
 </section>
@@ -457,7 +466,7 @@
                 <div class="remax-badge" style="font-size:0.6rem;margin-bottom:8px;">RE/MAX Chairman Club · #1 Top Producer</div>
                 <h3 class="font-display" style="font-size:2rem;color:white;margin-bottom:4px;">KENNETH TUPEA</h3>
                 <div class="accent" style="font-size:0.65rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:12px;">Lead Agent · Wholesale & Creative Finance Specialist</div>
-                <p style="color:#9ca3af;font-size:0.85rem;line-height:1.7;margin-bottom:16px;">Kenneth has established himself as the premier closing agent in the Salt Lake Valley. Combining elite high-performance sales discipline with advanced real estate acquisition strategies, Kenneth leads the brokerage in closed volume ($14.2M). Whether negotiating retail listings or structuring complex off-market creative financing, he delivers unmatched execution.</p>
+                <p style="color:#9ca3af;font-size:0.85rem;line-height:1.7;margin-bottom:16px;">Kenneth has established himself as the premier closing agent in the Salt Lake Valley. Combining elite high-performance sales discipline with advanced real estate acquisition strategies, Kenneth leads the brokerage in closed volume ($12.8M). Whether negotiating retail listings or structuring complex off-market creative financing, he delivers unmatched execution.</p>
                 <a href="tel:8014728010" style="font-size:0.65rem;color:#d4af37;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;text-decoration:none;">(801) 472-8010 →</a>
             </div>
         </div>
@@ -603,10 +612,6 @@
             <h2 class="font-display" style="font-size:4.5rem;color:white;line-height:0.9;margin-bottom:28px;">LET'S FIND<br/><span class="accent">YOUR HOME.</span></h2>
             <p style="color:#9ca3af;line-height:1.8;margin-bottom:36px;">Whether you're buying retail, selling a property, or looking to offload an off-market house via creative financing — our team is ready to execute.</p>
             <div style="display:flex;flex-direction:column;gap:18px;">
-                <a href="tel:8014728010" style="display:flex;align-items:center;gap:14px;text-decoration:none;">
-                    <div style="width:48px;height:48px;border:1px solid rgba(212,175,55,0.3);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">📞</div>
-                    <div><div style="font-size:0.6rem;color:#6b7280;text-transform:uppercase;letter-spacing:0.2em;"></div><div style="color:white;font-weight:500;"></div></div>
-                </a>
                 <a href="tel:3852560204" style="display:flex;align-items:center;gap:14px;text-decoration:none;">
                     <div style="width:48px;height:48px;border:1px solid rgba(212,175,55,0.3);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">📞</div>
                     <div><div style="font-size:0.6rem;color:#6b7280;text-transform:uppercase;letter-spacing:0.2em;">Office / General Inquiries</div><div style="color:white;font-weight:500;">(385) 256-0204</div></div>
@@ -670,9 +675,7 @@
                 <span class="remax-badge" style="font-size:0.65rem;">RE/MAX</span>
             </div>
             <p>Topaz Realty Group is an independently owned and operated RE/MAX franchise partner operating in West Jordan, Utah. Committed to elite execution across retail transactions, wholesale contracts, and creative real estate solutions.</p>
-            <div style="margin-top:20px; display:flex; gap:15px; font-size:1.5rem;">
-                <span>🏡</span><span>⚖️</span>
-            </div>
+            <p style="margin-top:16px;color:#9ca3af;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;font-size:0.7rem;">Equal Housing Opportunity</p>
         </div>
         <div>
             <div style="color:white;font-weight:600;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:14px;">Quick Links</div>
@@ -738,6 +741,9 @@
 </div>
 
 <script>
+// Static Draper photo (set from the single constant in <head>)
+document.getElementById('draperImgStatic').src = DRAPER_IMG;
+
 const agents = {
   SG: {
     initials: 'SG',
@@ -791,8 +797,8 @@ const agents = {
     title: 'Lead Agent · Wholesale & Creative Finance',
     badge: 'RE/MAX Chairman Club',
     rank: 1,
-    units: 19,
-    volume: '$14.2M',
+    units: 16,
+    volume: '$12.8M',
     phone: '(801) 472-8010',
     tel: '8014728010',
     avatarColor: '#d4af37',
@@ -801,10 +807,10 @@ const agents = {
     borderColor: '#d4af37',
     isKenneth: true,
     specialties: ['Wholesale Contracts', 'Subject-To Financing', 'Seller Financing', 'Luxury Retail'],
-    bio: `Kenneth Tupea is the premier closing agent in the Salt Lake Valley. As the #1 top producer at Topaz Realty Group, Kenneth has redefined the modern real estate transaction by combining elite high-performance sales discipline with advanced acquisition strategies.\n\nBefore dominating real estate, Kenneth honed his craft in high-level D2D sales, where he developed the negotiation instincts and client-first mentality that define his approach today. He doesn't just list houses—he structures deals. Whether executing traditional retail listings or structuring complex off-market creative financing (Sub-To, Seller Financing, Novations), Kenneth provides solutions that traditional agents simply cannot offer.\n\nWith $14.2M in closed volume and 19 units just this month, Kenneth operates at the highest tier of the RE/MAX network. His clients and cash buyers describe him as tenacious, highly analytical, and relentless in execution.`,
+    bio: `Kenneth Tupea is the premier closing agent in the Salt Lake Valley. As the #1 top producer at Topaz Realty Group, Kenneth has redefined the modern real estate transaction by combining elite high-performance sales discipline with advanced acquisition strategies.\n\nBefore dominating real estate, Kenneth honed his craft in high-level D2D sales, where he developed the negotiation instincts and client-first mentality that define his approach today. He doesn't just list houses—he structures deals. Whether executing traditional retail listings or structuring complex off-market creative financing (Sub-To, Seller Financing, Novations), Kenneth provides solutions that traditional agents simply cannot offer.\n\nWith $12.8M in closed volume and 16 units just this month, Kenneth operates at the highest tier of the RE/MAX network. His clients and cash buyers describe him as tenacious, highly analytical, and relentless in execution.`,
     stats: [
-      { label: 'Monthly Volume', val: '$14.2M' },
-      { label: 'Units Sold', val: '19' },
+      { label: 'Monthly Volume', val: '$12.8M' },
+      { label: 'Units Sold', val: '16' },
       { label: 'Team Rank', val: '#1' },
       { label: 'RE/MAX Tier', val: 'Chairman' },
     ]
@@ -815,8 +821,8 @@ const agents = {
     title: 'Buyer Specialist',
     badge: 'RE/MAX Diamond Club',
     rank: 2,
-    units: 14,
-    volume: '$10.5M',
+    units: 13,
+    volume: '$9.9M',
     phone: '(801) 452-1873',
     tel: '8014521873',
     avatarColor: '#9ca3af',
@@ -824,10 +830,10 @@ const agents = {
     rankColor: '#9ca3af',
     borderColor: '#9ca3af',
     specialties: ['First-Time Buyers', 'FHA Programs', 'Salt Lake County', 'Relocation'],
-    bio: `Madison Reyes is Topaz Realty's go-to specialist for first-time homebuyers and FHA financing programs across Salt Lake County. With a passion for making homeownership accessible, she has helped dozens of clients navigate one of the most competitive housing markets in the country.\n\nHer deep knowledge of government-backed loan programs — FHA, USDA, VA — means her clients often qualify for homes they didn't think were within reach. She is patient, thorough, and committed to education: her clients always walk away understanding every step of the process.\n\nCurrently ranked #2 on the team with $10.5M in volume and 14 units closed this month.`,
+    bio: `Madison Reyes is Topaz Realty's go-to specialist for first-time homebuyers and FHA financing programs across Salt Lake County. With a passion for making homeownership accessible, she has helped dozens of clients navigate one of the most competitive housing markets in the country.\n\nHer deep knowledge of government-backed loan programs — FHA, USDA, VA — means her clients often qualify for homes they didn't think were within reach. She is patient, thorough, and committed to education: her clients always walk away understanding every step of the process.\n\nCurrently ranked #2 on the team with $9.9M in volume and 13 units closed this month.`,
     stats: [
-      { label: 'Monthly Volume', val: '$10.5M' },
-      { label: 'Units Sold', val: '14' },
+      { label: 'Monthly Volume', val: '$9.9M' },
+      { label: 'Units Sold', val: '13' },
       { label: 'Team Rank', val: '#2' },
       { label: 'RE/MAX Tier', val: 'Diamond' },
     ]
@@ -838,8 +844,8 @@ const agents = {
     title: 'Investment Specialist',
     badge: 'RE/MAX Platinum',
     rank: 3,
-    units: 11,
-    volume: '$8.6M',
+    units: 10,
+    volume: '$7.7M',
     phone: '(801) 987-3204',
     tel: '8019873204',
     avatarColor: '#cd7f32',
@@ -847,10 +853,10 @@ const agents = {
     rankColor: '#cd7f32',
     borderColor: '#cd7f32',
     specialties: ['Investment Properties', 'Multi-Unit', 'Fix & Flip', 'Short-Term Rentals'],
-    bio: `Jordan Taua is Topaz Realty's resident expert in investment real estate. Whether you're looking to acquire your first rental property, build a multi-unit portfolio, or execute a fix-and-flip strategy, Jordan brings the analytical rigor and market knowledge to make it happen.\n\nHe has personally invested in Utah real estate and understands the numbers from both sides of the table. His clients benefit from real-world experience — not just textbook advice. He specializes in multi-unit acquisitions, short-term rental consulting, and identifying undervalued properties in emerging Salt Lake County submarkets.\n\nRanked #3 on the team with $8.6M in volume and 11 units this month.`,
+    bio: `Jordan Taua is Topaz Realty's resident expert in investment real estate. Whether you're looking to acquire your first rental property, build a multi-unit portfolio, or execute a fix-and-flip strategy, Jordan brings the analytical rigor and market knowledge to make it happen.\n\nHe has personally invested in Utah real estate and understands the numbers from both sides of the table. His clients benefit from real-world experience — not just textbook advice. He specializes in multi-unit acquisitions, short-term rental consulting, and identifying undervalued properties in emerging Salt Lake County submarkets.\n\nRanked #3 on the team with $7.7M in volume and 10 units this month.`,
     stats: [
-      { label: 'Monthly Volume', val: '$8.6M' },
-      { label: 'Units Sold', val: '11' },
+      { label: 'Monthly Volume', val: '$7.7M' },
+      { label: 'Units Sold', val: '10' },
       { label: 'Team Rank', val: '#3' },
       { label: 'RE/MAX Tier', val: 'Platinum' },
     ]
@@ -861,8 +867,8 @@ const agents = {
     title: 'RE/MAX Associate',
     badge: 'RE/MAX 100% Club',
     rank: 4,
-    units: 9,
-    volume: '$6.8M',
+    units: 8,
+    volume: '$6.1M',
     phone: '(801) 555-0104',
     tel: '8015550104',
     avatarColor: '#6b7280',
@@ -870,10 +876,10 @@ const agents = {
     rankColor: '#6b7280',
     borderColor: '#374151',
     specialties: ['Residential Sales', 'Seller Representation', 'West Jordan', 'Herriman'],
-    bio: `Alyssa Sorensen is a dedicated RE/MAX Associate with a strong track record in residential sales across West Jordan and Herriman. Known for her exceptional attention to detail and client communication, Alyssa ensures every listing is presented at its highest potential.\n\nShe is particularly skilled in seller representation — from strategic pricing and staging advice to expert negotiation at the closing table. Her clients consistently praise her responsiveness and professionalism throughout the entire transaction.\n\nCurrently ranked #4 on the Topaz Realty team with $6.8M in volume and 9 units this month.`,
+    bio: `Alyssa Sorensen is a dedicated RE/MAX Associate with a strong track record in residential sales across West Jordan and Herriman. Known for her exceptional attention to detail and client communication, Alyssa ensures every listing is presented at its highest potential.\n\nShe is particularly skilled in seller representation — from strategic pricing and staging advice to expert negotiation at the closing table. Her clients consistently praise her responsiveness and professionalism throughout the entire transaction.\n\nCurrently ranked #4 on the Topaz Realty team with $6.1M in volume and 8 units this month.`,
     stats: [
-      { label: 'Monthly Volume', val: '$6.8M' },
-      { label: 'Units Sold', val: '9' },
+      { label: 'Monthly Volume', val: '$6.1M' },
+      { label: 'Units Sold', val: '8' },
       { label: 'Team Rank', val: '#4' },
       { label: 'RE/MAX Tier', val: '100% Club' },
     ]
@@ -885,7 +891,7 @@ const agents = {
     badge: 'RE/MAX Executive Club',
     rank: 5,
     units: 7,
-    volume: '$5.6M',
+    volume: '$5.2M',
     phone: '(801) 555-0105',
     tel: '8015550105',
     avatarColor: '#6b7280',
@@ -893,9 +899,9 @@ const agents = {
     rankColor: '#6b7280',
     borderColor: '#374151',
     specialties: ['New Construction', 'Move-Up Buyers', 'South Jordan', 'Draper'],
-    bio: `Derek Bateman brings energy and expertise to every client relationship. Specializing in new construction and move-up buyers across South Jordan and Draper, Derek has a sharp eye for value and a reputation for making the buying process feel seamless — even in fast-moving markets.\n\nHis background in construction gives him a unique advantage when evaluating new builds and helping clients understand what they're truly getting for their money. He takes a consultative approach and is always willing to go the extra mile for his clients.\n\nCurrently ranked #5 on the team with $5.6M in volume and 7 units this month.`,
+    bio: `Derek Bateman brings energy and expertise to every client relationship. Specializing in new construction and move-up buyers across South Jordan and Draper, Derek has a sharp eye for value and a reputation for making the buying process feel seamless — even in fast-moving markets.\n\nHis background in construction gives him a unique advantage when evaluating new builds and helping clients understand what they're truly getting for their money. He takes a consultative approach and is always willing to go the extra mile for his clients.\n\nCurrently ranked #5 on the team with $5.2M in volume and 7 units this month.`,
     stats: [
-      { label: 'Monthly Volume', val: '$5.6M' },
+      { label: 'Monthly Volume', val: '$5.2M' },
       { label: 'Units Sold', val: '7' },
       { label: 'Team Rank', val: '#5' },
       { label: 'RE/MAX Tier', val: 'Executive' },
@@ -907,8 +913,8 @@ const agents = {
     title: 'RE/MAX Associate',
     badge: 'RE/MAX Associate',
     rank: 6,
-    units: 6,
-    volume: '$4.7M',
+    units: 5,
+    volume: '$4.1M',
     phone: '(801) 555-0106',
     tel: '8015550106',
     avatarColor: '#6b7280',
@@ -916,10 +922,10 @@ const agents = {
     rankColor: '#6b7280',
     borderColor: '#374151',
     specialties: ['Luxury Homes', 'Condo & Townhome', 'Sandy', 'Murray'],
-    bio: `Natalie Chen is a rising star at Topaz Realty with a keen focus on the luxury and attached-home segments of the Salt Lake market. Her background in interior design gives her a unique edge — she helps sellers present their homes beautifully and helps buyers envision the potential in every space.\n\nNatalie is known for her calm, confident style and her ability to build strong relationships with clients who appreciate a high-touch, detail-oriented experience. She is fluent in Mandarin, making her a valuable resource for international buyers looking to invest in Utah real estate.\n\nCurrently ranked #6 on the team with $4.7M in volume and 6 units this month.`,
+    bio: `Natalie Chen is a rising star at Topaz Realty with a keen focus on the luxury and attached-home segments of the Salt Lake market. Her background in interior design gives her a unique edge — she helps sellers present their homes beautifully and helps buyers envision the potential in every space.\n\nNatalie is known for her calm, confident style and her ability to build strong relationships with clients who appreciate a high-touch, detail-oriented experience. She is fluent in Mandarin, making her a valuable resource for international buyers looking to invest in Utah real estate.\n\nCurrently ranked #6 on the team with $4.1M in volume and 5 units this month.`,
     stats: [
-      { label: 'Monthly Volume', val: '$4.7M' },
-      { label: 'Units Sold', val: '6' },
+      { label: 'Monthly Volume', val: '$4.1M' },
+      { label: 'Units Sold', val: '5' },
       { label: 'Team Rank', val: '#6' },
       { label: 'RE/MAX Tier', val: 'Associate' },
     ]
@@ -931,7 +937,7 @@ const agents = {
     badge: 'RE/MAX Associate',
     rank: 7,
     units: 5,
-    volume: '$3.7M',
+    volume: '$3.5M',
     phone: '(801) 555-0107',
     tel: '8015550107',
     avatarColor: '#6b7280',
@@ -939,9 +945,9 @@ const agents = {
     rankColor: '#6b7280',
     borderColor: '#374151',
     specialties: ['Residential Sales', 'Community Expertise', 'Taylorsville', 'Kearns'],
-    bio: `Paul Fotu is a community-focused agent who takes deep pride in helping families find homes in the neighborhoods he knows best. Raised in the Salt Lake Valley, Paul has an authentic connection to the communities he serves — and it shows in how his clients trust and refer him.\n\nHe brings a straightforward, honest approach to every deal and is especially effective working with families navigating their first or second home purchase. His warm personality and deep roots in the Valley make him a natural fit for buyers who want an agent who truly gets the area.\n\nCurrently ranked #7 on the team with $3.7M in volume and 5 units this month.`,
+    bio: `Paul Fotu is a community-focused agent who takes deep pride in helping families find homes in the neighborhoods he knows best. Raised in the Salt Lake Valley, Paul has an authentic connection to the communities he serves — and it shows in how his clients trust and refer him.\n\nHe brings a straightforward, honest approach to every deal and is especially effective working with families navigating their first or second home purchase. His warm personality and deep roots in the Valley make him a natural fit for buyers who want an agent who truly gets the area.\n\nCurrently ranked #7 on the team with $3.5M in volume and 5 units this month.`,
     stats: [
-      { label: 'Monthly Volume', val: '$3.7M' },
+      { label: 'Monthly Volume', val: '$3.5M' },
       { label: 'Units Sold', val: '5' },
       { label: 'Team Rank', val: '#7' },
       { label: 'RE/MAX Tier', val: 'Associate' },
@@ -953,8 +959,8 @@ const agents = {
     title: 'RE/MAX Associate',
     badge: 'RE/MAX Associate',
     rank: 8,
-    units: 4,
-    volume: '$2.9M',
+    units: 3,
+    volume: '$2.6M',
     phone: '(801) 555-0108',
     tel: '8015550108',
     avatarColor: '#6b7280',
@@ -962,10 +968,10 @@ const agents = {
     rankColor: '#6b7280',
     borderColor: '#374151',
     specialties: ['Buyer Representation', 'Townhomes', 'Riverton', 'Bluffdale'],
-    bio: `Stephanie Larsen is a detail-oriented buyer's agent who brings patience and precision to every search. She specializes in townhomes and entry-level single-family homes in Riverton and Bluffdale — markets where she has helped numerous first-time buyers successfully navigate bidding wars and tight inventory.\n\nStephanie's clients value her honesty, her market data-driven advice, and her ability to move quickly when the right property hits the market. She is always prepared, always available, and always looking out for her clients' best interests.\n\nCurrently ranked #8 on the team with $2.9M in volume and 4 units this month.`,
+    bio: `Stephanie Larsen is a detail-oriented buyer's agent who brings patience and precision to every search. She specializes in townhomes and entry-level single-family homes in Riverton and Bluffdale — markets where she has helped numerous first-time buyers successfully navigate bidding wars and tight inventory.\n\nStephanie's clients value her honesty, her market data-driven advice, and her ability to move quickly when the right property hits the market. She is always prepared, always available, and always looking out for her clients' best interests.\n\nCurrently ranked #8 on the team with $2.6M in volume and 3 units this month.`,
     stats: [
-      { label: 'Monthly Volume', val: '$2.9M' },
-      { label: 'Units Sold', val: '4' },
+      { label: 'Monthly Volume', val: '$2.6M' },
+      { label: 'Units Sold', val: '3' },
       { label: 'Team Rank', val: '#8' },
       { label: 'RE/MAX Tier', val: 'Associate' },
     ]
@@ -977,7 +983,7 @@ const agents = {
     badge: 'RE/MAX Associate',
     rank: 9,
     units: 3,
-    volume: '$2.0M',
+    volume: '$1.9M',
     phone: '(801) 555-0109',
     tel: '8015550109',
     avatarColor: '#6b7280',
@@ -985,9 +991,9 @@ const agents = {
     rankColor: '#6b7280',
     borderColor: '#374151',
     specialties: ['Residential Sales', 'Military Relocation', 'VA Loans', 'Magna'],
-    bio: `Brandon Maea is a driven agent with a heart for serving military families. A veteran himself, Brandon has firsthand experience with the relocation challenges that come with military life — and he has made it his mission to ensure veterans and active-duty service members get the expert guidance they deserve when using VA loan benefits.\n\nBeyond military relocation, Brandon has been building a strong residential practice in Magna and the west side of Salt Lake County. He is ambitious, coachable, and hungry to climb the Topaz Realty leaderboard.\n\nCurrently ranked #9 on the team with $2.0M in volume and 3 units this month.`,
+    bio: `Brandon Maea is a driven agent with a heart for serving military families. A veteran himself, Brandon has firsthand experience with the relocation challenges that come with military life — and he has made it his mission to ensure veterans and active-duty service members get the expert guidance they deserve when using VA loan benefits.\n\nBeyond military relocation, Brandon has been building a strong residential practice in Magna and the west side of Salt Lake County. He is ambitious, coachable, and hungry to climb the Topaz Realty leaderboard.\n\nCurrently ranked #9 on the team with $1.9M in volume and 3 units this month.`,
     stats: [
-      { label: 'Monthly Volume', val: '$2.0M' },
+      { label: 'Monthly Volume', val: '$1.9M' },
       { label: 'Units Sold', val: '3' },
       { label: 'Team Rank', val: '#9' },
       { label: 'RE/MAX Tier', val: 'Associate' },
@@ -1000,7 +1006,7 @@ const agents = {
     badge: 'RE/MAX Associate',
     rank: 10,
     units: 2,
-    volume: '$1.3M',
+    volume: '$1.2M',
     phone: '(801) 555-0110',
     tel: '8015550110',
     avatarColor: '#6b7280',
@@ -1008,9 +1014,9 @@ const agents = {
     rankColor: '#6b7280',
     borderColor: '#374151',
     specialties: ['Residential Sales', 'Seniors & Downsizers', 'Midvale', 'Millcreek'],
-    bio: `Tina Whitmore brings warmth, wisdom, and a wealth of life experience to her real estate practice. Specializing in seniors and downsizers transitioning from larger family homes, Tina has developed a reputation for compassionate, unhurried service that puts her clients at ease during major life changes.\n\nShe is deeply knowledgeable about estate considerations, probate sales, and helping clients determine the right next step — whether that's a smaller single-story home, a 55+ community, or a condo that fits a simpler lifestyle.\n\nCurrently ranked #10 on the team with $1.3M in volume and 2 units this month.`,
+    bio: `Tina Whitmore brings warmth, wisdom, and a wealth of life experience to her real estate practice. Specializing in seniors and downsizers transitioning from larger family homes, Tina has developed a reputation for compassionate, unhurried service that puts her clients at ease during major life changes.\n\nShe is deeply knowledgeable about estate considerations, probate sales, and helping clients determine the right next step — whether that's a smaller single-story home, a 55+ community, or a condo that fits a simpler lifestyle.\n\nCurrently ranked #10 on the team with $1.2M in volume and 2 units this month.`,
     stats: [
-      { label: 'Monthly Volume', val: '$1.3M' },
+      { label: 'Monthly Volume', val: '$1.2M' },
       { label: 'Units Sold', val: '2' },
       { label: 'Team Rank', val: '#10' },
       { label: 'RE/MAX Tier', val: 'Associate' },
@@ -1348,12 +1354,12 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('DOMContentLoaded', () => {
         db.collection("activeListings").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
             const container = document.getElementById("dynamicListings");
-            // Maintain the static base64 listing at the start
+            // Keep the static Draper listing first
             let cardsHTML = `
             <div class="listing-card">
                 <div>
                     <div style="position:relative;">
-                        <img src="data:image/png;base64,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" style="width:100%;height:240px;object-fit:cover;" alt="Draper Estate" />
+                        <img src="${DRAPER_IMG}" style="width:100%;height:240px;object-fit:cover;" alt="Draper Estate" />
                         <div style="position:absolute;top:12px;left:12px;background:#d4af37;color:#080808;font-family:'Bebas Neue',sans-serif;font-size:0.75rem;letter-spacing:0.1em;padding:4px 10px;">FOR SALE</div>
                     </div>
                     <div style="padding:24px;">
@@ -1407,7 +1413,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const file = document.getElementById("listImage").files[0];
         const storageRef = storage.ref(`property_images/${Date.now()}_${file.name}`);
-        
+
         try {
             await storageRef.put(file);
             const imgUrl = await storageRef.getDownloadURL();
